@@ -8,22 +8,22 @@ def _timestamp():
     return datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
 
 
-# def save_raw(df: pd.DataFrame, name="youtube_raw"):
-#     RAW_DATA_DIR.mkdir(parents=True, exist_ok=True)
+def save_raw(df: pd.DataFrame, name="youtube_raw"):
+    RAW_DATA_DIR.mkdir(parents=True, exist_ok=True)
 
-#     path = RAW_DATA_DIR / f"{name}_{_timestamp()}.csv"
-#     df.to_csv(path, index=False)
+    path = RAW_DATA_DIR / f"{name}_{_timestamp()}.csv"
+    df.to_csv(path, index=False)
 
-#     print(f"[RAW SAVED] {path}")
+    print(f"[RAW SAVED] {path}")
 
 
-# def save_processed(df: pd.DataFrame, name="youtube_processed"):
-#     PROCESSED_DATA_DIR.mkdir(parents=True, exist_ok=True)
+def save_processed(df: pd.DataFrame, name="youtube_processed"):
+    PROCESSED_DATA_DIR.mkdir(parents=True, exist_ok=True)
 
-#     path = PROCESSED_DATA_DIR / f"{name}_{_timestamp()}.csv"
-#     df.to_csv(path, index=False)
+    path = PROCESSED_DATA_DIR / f"{name}_{_timestamp()}.csv"
+    df.to_csv(path, index=False)
 
-#     print(f"[PROCESSED SAVED] {path}")
+    print(f"[PROCESSED SAVED] {path}")
 
 
 # def load_data(path):
