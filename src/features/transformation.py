@@ -9,17 +9,22 @@ import re
 
 # convert duration into actual hr, mins and seconds values
 def parse_duration(duration):
+    if pd.isna(duration):
+        return 0
+
     hours = minutes = seconds = 0
 
-    match = re.match(r"PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?", duration)
+    match = re.match(
+        r"PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?",
+        str(duration)
+    )
 
     if match:
-        hours = int(match.group(1)) if match.group(1) else 0
-        minutes = int(match.group(2)) if match.group(2) else 0
-        seconds = int(match.group(3)) if match.group(3) else 0
+        hours = int(match.group(1) or 0)
+        minutes = int(match.group(2) or 0)
+        seconds = int(match.group(3) or 0)
 
     return hours * 3600 + minutes * 60 + seconds
-
 
 
 
@@ -67,10 +72,23 @@ def build_features(df):
     df["hour"] = df["published_at"].dt.hour
     df["day_of_week"] = df["published_at"].dt.dayofweek
 
-    # duration (IMPORTANT ADDITION)
+    # duration 
+    df["duration"] = df["duration"].fillna("PT0S")
     df["duration_seconds"] = df["duration"].apply(parse_duration)
-    df["duration_minutes"] = df["duration_seconds"] / 60
+    df["duration_minutes"] = (df["duration_seconds"] / 60).round(2)
     df["is_short"] = (df["duration_seconds"] <= 60).astype(int)
+    
+    df["duration_group"] = pd.cut(
+    df["duration_seconds"],
+    bins=[0, 60, 300, 900, 3600, np.inf],
+    labels=[
+        "Under 1 min",
+        "1-5 mins",
+        "5-15 mins",
+        "15-60 mins",
+        "60+ mins"
+    ]
+)
 
     # virality
     threshold = df["views"].quantile(0.9)
