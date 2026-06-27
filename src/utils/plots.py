@@ -6,12 +6,20 @@ from src.config import OUTPUT_DIR
 # Global theme
 sns.set_theme(style="whitegrid")
 
-FIG_WIDTH = 8
-FIG_HEIGHT = 6
+FIG_WIDTH = 12
+FIG_HEIGHT = 7
 
-TITLE_SIZE = 18
+TITLE_SIZE = 20
 LABEL_SIZE = 14
 TICK_SIZE = 12
+
+YOUTUBE_RED = "#FF0000"
+DARK_RED = "#CC0000"
+LIGHT_RED = "#FF4D4D"
+
+PALETTE = sns.color_palette(
+    [YOUTUBE_RED, LIGHT_RED, "#FF8080", "#FFB3B3"]
+)
 
 
 # create figure canvas
@@ -60,17 +68,45 @@ def save_figure(
     filename,
     dpi=300
 ):
-    OUTPUT_DIR.mkdir(
+    path = OUTPUT_DIR / filename
+
+    
+    path.parent.mkdir(
         parents=True,
         exist_ok=True
     )
 
-    path = OUTPUT_DIR / filename
-
     fig.savefig(
         path,
         dpi=dpi,
-        bbox_inches="tight"
+        bbox_inches="tight",
+        facecolor="white"
     )
 
-    print(f"Saved: {path}") 
+    print(f"Saved: {path}")
+
+
+
+# add source
+def add_source(
+    fig,
+    text="Source: YouTube Data API v3"
+):
+    fig.text(
+        0.01,
+        0.01,
+        text,
+        fontsize=10,
+        alpha=0.7
+    )
+
+# add bar labels
+def add_bar_labels(ax, decimals=0):
+    fmt = f"%.{decimals}f"
+
+    for container in ax.containers:
+        ax.bar_label(
+            container,
+            fmt=fmt,
+            fontsize=10
+        )
