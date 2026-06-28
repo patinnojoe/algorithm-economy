@@ -101,7 +101,7 @@ def add_source(
     )
 
 # add bar labels
-def add_bar_labels(ax, decimals=0):
+def add_bar_labels(ax, decimals=0): 
     fmt = f"%.{decimals}f"
 
     for container in ax.containers:
@@ -110,3 +110,45 @@ def add_bar_labels(ax, decimals=0):
             fmt=fmt,
             fontsize=10
         )
+
+
+
+# save figure
+def save_table(df, filename, index=True):
+    path = OUTPUT_DIR / filename
+    path.parent.mkdir(parents=True, exist_ok=True)
+    df.to_csv(path, index=index)
+    
+    print(f"Saved: {path}")
+    
+
+
+# eta interpretation
+def interpret_eta_squared(eta):
+    """
+    Print an interpretation of Eta Squared.
+    """
+
+    if eta < 0.01:
+        magnitude = "negligible"
+    elif eta < 0.06:
+        magnitude = "small"
+    elif eta < 0.14:
+        magnitude = "medium"
+    else:
+        magnitude = "large"
+
+    print("=" * 60)
+    print("Effect Size (Eta Squared)")
+    print("=" * 60)
+    print(f"Eta Squared : {eta:.4f}")
+    print(f"Magnitude   : {magnitude.capitalize()} effect")
+    print()
+    print(
+        f"Interpretation: Approximately {eta*100:.2f}% of the variation "
+        f"in engagement rate is explained by video category."
+    )
+    print(
+        f"The remaining {(1-eta)*100:.2f}% of the variation is attributable "
+        "to other factors not captured by category."
+    )

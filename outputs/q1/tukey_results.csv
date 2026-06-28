@@ -1,0 +1,106 @@
+,group1,group2,meandiff,p-adj,lower,upper,reject
+0,Autos & Vehicles,Comedy,-0.0046,1.0,-0.0301,0.0208,False
+1,Autos & Vehicles,Education,0.0003,1.0,-0.0248,0.0255,False
+2,Autos & Vehicles,Entertainment,-0.001,1.0,-0.026,0.024,False
+3,Autos & Vehicles,Film & Animation,-0.0021,1.0,-0.029,0.0249,False
+4,Autos & Vehicles,Gaming,0.0103,0.988,-0.0147,0.0353,False
+5,Autos & Vehicles,Howto & Style,0.0037,1.0,-0.0224,0.0299,False
+6,Autos & Vehicles,Music,-0.0035,1.0,-0.0287,0.0217,False
+7,Autos & Vehicles,News & Politics,0.0169,0.6684,-0.0092,0.043,False
+8,Autos & Vehicles,Nonprofits,0.0024,1.0,-0.053,0.0579,False
+9,Autos & Vehicles,People & Blogs,0.002,1.0,-0.0229,0.027,False
+10,Autos & Vehicles,Pets & Animals,0.0153,0.995,-0.0254,0.056,False
+11,Autos & Vehicles,Science & Tech,0.0057,1.0,-0.0199,0.0313,False
+12,Autos & Vehicles,Sports,-0.0027,1.0,-0.0279,0.0225,False
+13,Autos & Vehicles,Travel & Events,-0.0013,1.0,-0.0268,0.0243,False
+14,Comedy,Education,0.005,0.5389,-0.0021,0.012,False
+15,Comedy,Entertainment,0.0036,0.8782,-0.003,0.0103,False
+16,Comedy,Film & Animation,0.0026,1.0,-0.0094,0.0145,False
+17,Comedy,Gaming,0.0149,0.0,0.0082,0.0216,True
+18,Comedy,Howto & Style,0.0083,0.2509,-0.0018,0.0184,False
+19,Comedy,Music,0.0011,1.0,-0.0062,0.0084,False
+20,Comedy,News & Politics,0.0215,0.0,0.0116,0.0314,True
+21,Comedy,Nonprofits,0.007,1.0,-0.0429,0.0569,False
+22,Comedy,People & Blogs,0.0067,0.0266,0.0004,0.0129,True
+23,Comedy,Pets & Animals,0.0199,0.7615,-0.0129,0.0527,False
+24,Comedy,Science & Tech,0.0103,0.0049,0.0016,0.0189,True
+25,Comedy,Sports,0.0019,0.9999,-0.0054,0.0092,False
+26,Comedy,Travel & Events,0.0034,0.9901,-0.005,0.0117,False
+27,Education,Entertainment,-0.0013,0.9999,-0.0066,0.0039,False
+28,Education,Film & Animation,-0.0024,1.0,-0.0137,0.0089,False
+29,Education,Gaming,0.01,0.0,0.0046,0.0154,True
+30,Education,Howto & Style,0.0034,0.9965,-0.0059,0.0126,False
+31,Education,Music,-0.0038,0.7039,-0.0099,0.0022,False
+32,Education,News & Politics,0.0165,0.0,0.0075,0.0256,True
+33,Education,Nonprofits,0.0021,1.0,-0.0477,0.0518,False
+34,Education,People & Blogs,0.0017,0.9975,-0.0031,0.0065,False
+35,Education,Pets & Animals,0.015,0.967,-0.0176,0.0475,False
+36,Education,Science & Tech,0.0053,0.5403,-0.0023,0.013,False
+37,Education,Sports,-0.003,0.9371,-0.0092,0.0031,False
+38,Education,Travel & Events,-0.0016,1.0,-0.0089,0.0057,False
+39,Entertainment,Film & Animation,-0.0011,1.0,-0.012,0.0099,False
+40,Entertainment,Gaming,0.0113,0.0,0.0065,0.0161,True
+41,Entertainment,Howto & Style,0.0047,0.9037,-0.0042,0.0136,False
+42,Entertainment,Music,-0.0025,0.9709,-0.008,0.003,False
+43,Entertainment,News & Politics,0.0179,0.0,0.0091,0.0266,True
+44,Entertainment,Nonprofits,0.0034,1.0,-0.0463,0.0531,False
+45,Entertainment,People & Blogs,0.003,0.4522,-0.0011,0.0072,False
+46,Entertainment,Pets & Animals,0.0163,0.9324,-0.0161,0.0487,False
+47,Entertainment,Science & Tech,0.0067,0.1086,-0.0006,0.0139,False
+48,Entertainment,Sports,-0.0017,0.9994,-0.0073,0.0039,False
+49,Entertainment,Travel & Events,-0.0003,1.0,-0.0071,0.0066,False
+50,Film & Animation,Gaming,0.0124,0.0123,0.0013,0.0234,True
+51,Film & Animation,Howto & Style,0.0058,0.981,-0.0076,0.0191,False
+52,Film & Animation,Music,-0.0014,1.0,-0.0128,0.0099,False
+53,Film & Animation,News & Politics,0.0189,0.0001,0.0057,0.0322,True
+54,Film & Animation,Nonprofits,0.0045,1.0,-0.0462,0.0552,False
+55,Film & Animation,People & Blogs,0.0041,0.9943,-0.0067,0.0149,False
+56,Film & Animation,Pets & Animals,0.0174,0.9223,-0.0166,0.0513,False
+57,Film & Animation,Science & Tech,0.0077,0.711,-0.0046,0.02,False
+58,Film & Animation,Sports,-0.0006,1.0,-0.012,0.0108,False
+59,Film & Animation,Travel & Events,0.0008,1.0,-0.0113,0.0129,False
+60,Gaming,Howto & Style,-0.0066,0.4524,-0.0156,0.0024,False
+61,Gaming,Music,-0.0138,0.0,-0.0195,-0.0081,True
+62,Gaming,News & Politics,0.0066,0.4139,-0.0022,0.0154,False
+63,Gaming,Nonprofits,-0.0079,1.0,-0.0576,0.0418,False
+64,Gaming,People & Blogs,-0.0083,0.0,-0.0126,-0.004,True
+65,Gaming,Pets & Animals,0.005,1.0,-0.0274,0.0374,False
+66,Gaming,Science & Tech,-0.0046,0.7085,-0.0119,0.0027,False
+67,Gaming,Sports,-0.013,0.0,-0.0187,-0.0073,True
+68,Gaming,Travel & Events,-0.0116,0.0,-0.0185,-0.0046,True
+69,Howto & Style,Music,-0.0072,0.3722,-0.0166,0.0022,False
+70,Howto & Style,News & Politics,0.0132,0.0099,0.0016,0.0248,True
+71,Howto & Style,Nonprofits,-0.0013,1.0,-0.0516,0.049,False
+72,Howto & Style,People & Blogs,-0.0017,1.0,-0.0103,0.007,False
+73,Howto & Style,Pets & Animals,0.0116,0.9978,-0.0217,0.0449,False
+74,Howto & Style,Science & Tech,0.002,1.0,-0.0085,0.0125,False
+75,Howto & Style,Sports,-0.0064,0.5889,-0.0159,0.003,False
+76,Howto & Style,Travel & Events,-0.005,0.9486,-0.0152,0.0053,False
+77,Music,News & Politics,0.0204,0.0,0.0111,0.0296,True
+78,Music,Nonprofits,0.0059,1.0,-0.0439,0.0557,False
+79,Music,People & Blogs,0.0055,0.0197,0.0004,0.0107,True
+80,Music,Pets & Animals,0.0188,0.8231,-0.0138,0.0514,False
+81,Music,Science & Tech,0.0092,0.0062,0.0013,0.017,True
+82,Music,Sports,0.0008,1.0,-0.0055,0.0071,False
+83,Music,Travel & Events,0.0022,0.9996,-0.0052,0.0097,False
+84,News & Politics,Nonprofits,-0.0145,0.9997,-0.0647,0.0358,False
+85,News & Politics,People & Blogs,-0.0148,0.0,-0.0233,-0.0064,True
+86,News & Politics,Pets & Animals,-0.0016,1.0,-0.0348,0.0317,False
+87,News & Politics,Science & Tech,-0.0112,0.0193,-0.0216,-0.0009,True
+88,News & Politics,Sports,-0.0196,0.0,-0.0289,-0.0103,True
+89,News & Politics,Travel & Events,-0.0181,0.0,-0.0282,-0.0081,True
+90,Nonprofits,People & Blogs,-0.0004,1.0,-0.05,0.0493,False
+91,Nonprofits,Pets & Animals,0.0129,1.0,-0.0463,0.072,False
+92,Nonprofits,Science & Tech,0.0033,1.0,-0.0467,0.0533,False
+93,Nonprofits,Sports,-0.0051,1.0,-0.0549,0.0447,False
+94,Nonprofits,Travel & Events,-0.0037,1.0,-0.0536,0.0463,False
+95,People & Blogs,Pets & Animals,0.0133,0.9884,-0.0191,0.0456,False
+96,People & Blogs,Science & Tech,0.0036,0.9057,-0.0033,0.0106,False
+97,People & Blogs,Sports,-0.0047,0.1147,-0.0099,0.0004,False
+98,People & Blogs,Travel & Events,-0.0033,0.9273,-0.0098,0.0032,False
+99,Pets & Animals,Science & Tech,-0.0096,0.9997,-0.0425,0.0233,False
+100,Pets & Animals,Sports,-0.018,0.8663,-0.0506,0.0146,False
+101,Pets & Animals,Travel & Events,-0.0166,0.9302,-0.0494,0.0163,False
+102,Science & Tech,Sports,-0.0084,0.0239,-0.0162,-0.0005,True
+103,Science & Tech,Travel & Events,-0.0069,0.3211,-0.0157,0.0019,False
+104,Sports,Travel & Events,0.0014,1.0,-0.0061,0.0089,False
