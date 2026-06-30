@@ -114,12 +114,22 @@ def add_bar_labels(ax, decimals=0):
 
 
 # save figure
-def save_table(df, filename, index=True):
-    path = OUTPUT_DIR / filename
-    path.parent.mkdir(parents=True, exist_ok=True)
-    df.to_csv(path, index=index)
-    
-    print(f"Saved: {path}")
+def save_table(df, filename, fontsize=10):
+    fig, ax = plt.subplots(figsize=(12, len(df) * 0.35 + 1))
+    ax.axis("off")
+
+    table = ax.table(
+        cellText=df.values,
+        colLabels=df.columns,
+        loc="center"
+    )
+
+    table.auto_set_font_size(False)
+    table.set_fontsize(fontsize)
+    table.scale(1.2, 1.5)
+
+    save_figure(fig, filename)
+    plt.close(fig)
     
 
 

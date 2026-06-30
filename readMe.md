@@ -85,6 +85,8 @@ This project seeks to:
 - Distribution visualizations
 - Cross-tabulation analysis
 
+\*\*\* question two will not be answered because of an observed sampling bias with how search, trending videos are fetched from the API
+
 ---
 
 ### ❓ RQ3: Which content characteristics are associated with engagement?
