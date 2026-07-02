@@ -16,23 +16,24 @@ load_dotenv(ROOT_DIR / ".env")
 
 API_KEY = os.getenv("YOUTUBE_API_KEY")
 
-REGION_CODE = "US"   # keep global but default trending region
-MAX_RESULTS = 50
 
 # sampling sizes
 TRENDING_LIMIT = 5000
 RECENT_LIMIT = 5000
-SEARCH_LIMIT = 5000
 CHANNEL_LIMIT = 5000
+SEARCH_LIMIT = 5000
 
-# for data collection search
-SEARCH_QUERIES = [
-    "music", "education", "finance", "sports",
-    "comedy", "technology", "travel", "gaming",
-    "fitness", "food"
-]
+SEARCH_QUERY_FILE = (
+    DATA_DIR
+    / "cache"
+    / "youtube_search_queries_ng_clean.json"
+)
 
-
+SEARCH_USED_FILE = (
+    DATA_DIR
+    / "cache"
+    / "youtube_search_queries_used.json"
+)
 CATEGORY_MAP = {
     1: "Film & Animation",
     2: "Autos & Vehicles",

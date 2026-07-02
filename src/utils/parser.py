@@ -1,14 +1,27 @@
+"""
+parser.py
+
+Utilities for converting raw YouTube API responses
+into a standardized dataset.
+"""
+
 from datetime import datetime
 
 
 def safe_int(value):
+    """Safely convert values to integers."""
     try:
         return int(value)
-    except:
+    except (TypeError, ValueError):
         return 0
 
 
 def parse_video(item, source):
+    """
+    Parse a raw YouTube video object into
+    a standardized dictionary.
+    """
+
     snippet = item.get("snippet", {})
     stats = item.get("statistics", {})
     content = item.get("contentDetails", {})
@@ -17,14 +30,18 @@ def parse_video(item, source):
     likes = safe_int(stats.get("likeCount"))
     comments = safe_int(stats.get("commentCount"))
 
-    engagement_rate = (likes + comments) / views if views > 0 else 0
-
-    duration = content.get("duration", None)
+    engagement_rate = (
+        (likes + comments) / views
+        if views > 0 else 0
+    )
 
     return {
+
         "video_id": item.get("id"),
+
         "title": snippet.get("title"),
         "description": snippet.get("description"),
+
         "channel_id": snippet.get("channelId"),
         "channel_title": snippet.get("channelTitle"),
 
@@ -36,9 +53,12 @@ def parse_video(item, source):
         "views": views,
         "likes": likes,
         "comments": comments,
+
         "engagement_rate": engagement_rate,
 
-        "duration": duration,
+        "duration": content.get("duration"),
+
         "source": source,
+
         "collected_at": datetime.utcnow().isoformat()
     }

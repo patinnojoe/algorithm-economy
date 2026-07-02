@@ -1,41 +1,85 @@
-from googleapiclient.discovery import build
-import os
-from dotenv import load_dotenv
-import time
+"""
+trending.py
 
-load_dotenv()
+Collect videos promoted by YouTube's Trending algorithm
+within the Nigerian YouTube ecosystem.
 
-API_KEY = os.getenv("YOUTUBE_API_KEY")
-youtube = build("youtube", "v3", developerKey=API_KEY)
+Population:
+    Videos surfaced through the YouTube Trending page
+    for Nigeria (regionCode="NG").
+
+Author:
+Innocent Josiah Patrick
+"""
+
+from datetime import datetime
+from src.utils.parser import parse_video
+
+from .base import youtube, paginate
 
 
-def safe_request(request, retries=3):
-    for i in range(retries):
-        try:
-            return request.execute()
-        except Exception as e:
-            print(f"Retry {i+1}: {e}")
-            time.sleep(2 ** i)
-    return None
+REGION = "NG"
 
 
-def get_trending_videos(limit=5000):
+def get_trending_videos(limit=200):
+    """
+    Collect trending videos from YouTube Nigeria.
+
+    Parameters
+    ----------
+    limit : int
+        Maximum number of videos to collect.
+
+    Returns
+    -------
+    list
+        List of YouTube video objects.
+    """
+
+    print("Collecting Trending Videos (Nigeria)...")
+
     videos = []
+
+    timestamp = datetime.utcnow().isoformat()
 
     request = youtube.videos().list(
         part="snippet,statistics,contentDetails",
         chart="mostPopular",
-        maxResults=50,
-        regionCode="US"
+        regionCode=REGION,
+        maxResults=50
     )
 
-    while request and len(videos) < limit:
-        response = safe_request(request)
-        if not response:
+    collected = 0
+
+    for items in paginate(request, limit=limit):
+
+        for video in items:
+
+            video["collection_method"] = "trending"
+
+            video["collection_region"] = REGION
+
+            video["collection_timestamp"] = timestamp
+
+            # videos.append(video)
+            videos.append(
+                parse_video(
+                    video,
+                    source="trending"
+                ))
+
+        collected += len(items)
+
+        if collected >= limit:
             break
 
-        videos.extend(response.get("items", []))
-
-        request = youtube.videos().list_next(request, response)
+    print(f"Collected {len(videos)} trending videos from Nigeria.")
 
     return videos
+
+
+if __name__ == "__main__":
+
+    videos = get_trending_videos(limit=200)
+
+    print(f"\nTotal Videos: {len(videos)}")
