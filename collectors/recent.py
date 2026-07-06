@@ -4,14 +4,18 @@ recent.py
 Collect recently published YouTube videos.
 
 This collector represents the supply side of the
-Algorithmic Economy by sampling newly uploaded videos.
+Algorithmic Economy by sampling recently uploaded
+videos using archived Nigerian search queries.
 
 Author:
 Innocent Josiah Patrick
 """
 
+import json
+import random
 from datetime import datetime
 
+from src.config import SEARCH_QUERY_FILE
 from src.utils.parser import parse_video
 
 from .base import (
@@ -27,73 +31,153 @@ from .base import (
 
 REGION = "NG"
 
-DEFAULT_QUERY = "a"
-
 
 # --------------------------------------------------
 # Recent Upload Collector
 # --------------------------------------------------
 
-def get_recent_videos(limit=3000):
+def get_recent_videos(
+    limit=3000,
+    pages_per_query=2,
+    max_queries=25
+):
     """
-    Collect recently uploaded YouTube videos.
+    Collect recently uploaded videos.
+
+    Unlike the Search collector, queries are randomly
+    sampled every run and are NOT permanently consumed.
 
     Parameters
     ----------
     limit : int
-        Maximum number of videos to collect.
+        Maximum videos.
+
+    pages_per_query : int
+        Maximum search pages per keyword.
+
+    max_queries : int
+        Maximum number of keywords sampled during a run.
 
     Returns
     -------
     list
-        Parsed video records.
     """
 
     timestamp = datetime.utcnow().isoformat()
 
+    # -----------------------------------------
+    # Load query archive
+    # -----------------------------------------
+
+    with open(
+        SEARCH_QUERY_FILE,
+        "r",
+        encoding="utf-8"
+    ) as f:
+
+        queries = json.load(f)
+
+    random.shuffle(queries)
+
+    # Don't walk through the entire archive
+    queries = queries[:max_queries]
+
     videos = []
+    seen_videos = set()
 
-    seen = set()
+    try:
 
-    request = youtube.search().list(
-        part="id,snippet",
-        q=DEFAULT_QUERY,
-        type="video",
-        order="date",
-        regionCode=REGION,
-        maxResults=50
-    )
+        for query in queries:
 
-    for items in paginate(request, limit=limit):
+            print(f"Recent Query: {query}")
 
-        ids = extract_video_ids(items)
+            try:
 
-        details = fetch_video_details(ids)
+                request = youtube.search().list(
+                    part="id,snippet",
+                    q=query,
+                    type="video",
+                    order="date",
+                    regionCode=REGION,
+                    maxResults=50
+                )
 
-        for video in details:
+                pages = 0
 
-            video_id = video["id"]
+                for items in paginate(request):
 
-            if video_id in seen:
+                    if not items:
+                        break
+
+                    ids = extract_video_ids(items)
+
+                    if not ids:
+                        continue
+
+                    details = fetch_video_details(ids)
+
+                    if not details:
+                        break
+
+                    for video in details:
+
+                        video_id = video["id"]
+
+                        if video_id in seen_videos:
+                            continue
+
+                        seen_videos.add(video_id)
+
+                        video["collection_method"] = "recent"
+                        video["collection_query"] = query
+                        video["collection_region"] = REGION
+                        video["collection_timestamp"] = timestamp
+
+                        videos.append(
+                            parse_video(
+                                video,
+                                discovery_source="recent"
+                            )
+                        )
+
+                        if len(videos) >= limit:
+
+                            print(
+                                f"Collected {len(videos):,} recent videos."
+                            )
+
+                            return videos
+
+                    pages += 1
+
+                    if pages >= pages_per_query:
+                        break
+
+            except Exception as e:
+
+                print(
+                    f"Skipping recent query '{query}' ({e})"
+                )
+
                 continue
 
-            seen.add(video_id)
+        print(
+            f"Collected {len(videos):,} recent videos."
+        )
 
-            video["collection_method"] = "recent"
-            video["collection_region"] = REGION
-            video["collection_timestamp"] = timestamp
+        return videos
 
-            videos.append(
-                parse_video(
-                    video,
-                    source="recent"
-                )
-            )
+    except KeyboardInterrupt:
 
-            if len(videos) >= limit:
-                return videos
+        print("\nRecent collector interrupted.")
 
-    return videos
+        return videos
+
+    except Exception as e:
+
+        print(f"\nRecent collector stopped: {e}")
+
+        return videos
 
 
 # --------------------------------------------------
@@ -104,4 +188,4 @@ if __name__ == "__main__":
 
     videos = get_recent_videos(limit=500)
 
-    print(f"Collected {len(videos)} recent videos.")
+    print(f"\nCollected {len(videos)} recent videos.")

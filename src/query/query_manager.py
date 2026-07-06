@@ -13,15 +13,19 @@ Innocent Josiah Patrick
 import json
 import random
 
-from pathlib import Path
-
 from src.config import (
     SEARCH_QUERY_FILE,
-    SEARCH_USED_FILE
+    SEARCH_USED_FILE,
 )
 
 
 class QueryManager:
+    """
+    Manage archived search queries.
+
+    Queries are loaded once, marked as used in memory,
+    and periodically persisted to disk.
+    """
 
     def __init__(self):
 
@@ -29,7 +33,9 @@ class QueryManager:
 
         self.used = self._load_used()
 
-    # -----------------------------------------
+    # --------------------------------------------------
+    # Loading
+    # --------------------------------------------------
 
     def _load_master(self):
 
@@ -39,9 +45,10 @@ class QueryManager:
             encoding="utf-8"
         ) as f:
 
-            return json.load(f)
+            queries = json.load(f)
 
-    # -----------------------------------------
+        # remove duplicates while preserving order
+        return list(dict.fromkeys(queries))
 
     def _load_used(self):
 
@@ -70,25 +77,29 @@ class QueryManager:
 
             return set(json.load(f))
 
-    # -----------------------------------------
+    # --------------------------------------------------
+    # Query Management
+    # --------------------------------------------------
 
     def remaining_queries(self):
 
         remaining = list(
-
             set(self.master) - self.used
-
         )
 
         random.shuffle(remaining)
 
         return remaining
 
-    # -----------------------------------------
-
     def mark_used(self, query):
 
         self.used.add(query)
+
+    # --------------------------------------------------
+    # Persistence
+    # --------------------------------------------------
+
+    def save(self):
 
         with open(
             SEARCH_USED_FILE,
@@ -97,33 +108,19 @@ class QueryManager:
         ) as f:
 
             json.dump(
-                sorted(list(self.used)),
+                sorted(self.used),
                 f,
                 indent=4,
                 ensure_ascii=False
             )
 
-    # -----------------------------------------
+    # --------------------------------------------------
+    # Utilities
+    # --------------------------------------------------
 
     def remaining(self):
 
         return len(self.master) - len(self.used)
-
-    # -----------------------------------------
-
-    def reset(self):
-
-        self.used = set()
-
-        with open(
-            SEARCH_USED_FILE,
-            "w",
-            encoding="utf-8"
-        ) as f:
-
-            json.dump([], f, indent=4)
-
-    # -----------------------------------------
 
     def stats(self):
 
@@ -136,3 +133,9 @@ class QueryManager:
             "remaining": self.remaining()
 
         }
+
+    def reset(self):
+
+        self.used = set()
+
+        self.save()

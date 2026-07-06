@@ -1,9 +1,10 @@
 """
 search.py
 
-Collect YouTube videos from archived search queries.
+Collect YouTube videos from archived Nigerian
+search queries.
 
-Each search query is used only once across
+Each search query is sampled only once across
 all collection runs.
 
 Author:
@@ -16,24 +17,43 @@ from src.utils.parser import parse_video
 from src.query.query_manager import QueryManager
 
 from .base import (
-
     youtube,
-
     paginate,
-
     fetch_video_details,
-
-    extract_video_ids
-
+    extract_video_ids,
 )
+
+# --------------------------------------------------
+# Configuration
+# --------------------------------------------------
 
 REGION = "NG"
 
 
+# --------------------------------------------------
+# Search Collector
+# --------------------------------------------------
+
 def get_search_videos(
-    limit=5000,
-    pages_per_query=2
+    limit=1000,
+    pages_per_query=1,
+    save_interval=20
 ):
+    """
+    Collect YouTube videos using archived Nigerian
+    search queries.
+
+    Parameters
+    ----------
+    limit : int
+        Maximum number of videos.
+
+    pages_per_query : int
+        Maximum pages per keyword.
+
+    save_interval : int
+        Persist used-query cache every N keywords.
+    """
 
     timestamp = datetime.utcnow().isoformat()
 
@@ -43,9 +63,9 @@ def get_search_videos(
 
     queries = manager.remaining_queries()
 
-    if len(queries) == 0:
+    if not queries:
 
-        print("No search queries remaining.")
+        print("No remaining search queries.")
 
         return []
 
@@ -53,88 +73,134 @@ def get_search_videos(
 
     seen_videos = set()
 
-    for query in queries:
+    processed_queries = 0
 
-        print(f"Searching: {query}")
+    try:
 
-        request = youtube.search().list(
+        for query in queries:
 
-            part="id,snippet",
+            if len(videos) >= limit:
+                break
 
-            q=query,
+            print(f"Searching: {query}")
 
-            type="video",
+            try:
 
-            regionCode=REGION,
+                request = youtube.search().list(
 
-            maxResults=50
+                    part="id,snippet",
 
-        )
+                    q=query,
 
-        pages = 0
+                    type="video",
 
-        for items in paginate(request):
+                    regionCode=REGION,
 
-            ids = extract_video_ids(items)
-
-            if not ids:
-                continue
-
-            details = fetch_video_details(ids)
-
-            for video in details:
-
-                video_id = video["id"]
-
-                if video_id in seen_videos:
-                    continue
-
-                seen_videos.add(video_id)
-
-                video["collection_method"] = "search"
-
-                video["collection_query"] = query
-
-                video["collection_region"] = REGION
-
-                video["collection_timestamp"] = timestamp
-
-                videos.append(
-
-                    parse_video(
-                        video,
-                        source="search"
-                    )
+                    maxResults=50
 
                 )
 
-                if len(videos) >= limit:
+                pages = 0
 
-                    manager.mark_used(query)
+                for items in paginate(request):
 
-                    print(
-                        f"Collected {len(videos):,} videos."
-                    )
+                    if not items:
+                        break
 
-                    return videos
+                    ids = extract_video_ids(items)
 
-            pages += 1
+                    if not ids:
+                        break
 
-            if pages >= pages_per_query:
-                break
+                    details = fetch_video_details(ids)
 
-        # mark keyword immediately after processing
-        manager.mark_used(query)
+                    if not details:
+                        break
 
-    print(
-        f"Collected {len(videos):,} videos."
-    )
+                    for video in details:
 
-    return videos
+                        video_id = video["id"]
 
+                        if video_id in seen_videos:
+                            continue
+
+                        seen_videos.add(video_id)
+
+                        video["collection_method"] = "search"
+                        video["collection_query"] = query
+                        video["collection_region"] = REGION
+                        video["collection_timestamp"] = timestamp
+
+                        videos.append(
+
+                            parse_video(
+                                video,
+                                discovery_source="search"
+                            )
+
+                        )
+
+                        if len(videos) >= limit:
+                            break
+
+                    pages += 1
+
+                    if (
+                        pages >= pages_per_query
+                        or len(videos) >= limit
+                    ):
+                        break
+
+            except Exception as e:
+
+                print(
+                    f"Skipping query '{query}' ({e})"
+                )
+
+            finally:
+
+                # keyword is consumed once attempted
+
+                manager.mark_used(query)
+
+                processed_queries += 1
+
+                if processed_queries % save_interval == 0:
+
+                    manager.save()
+
+        manager.save()
+
+        print(
+            f"Collected {len(videos):,} search videos "
+            f"from {processed_queries:,} queries."
+        )
+
+        return videos
+
+    except KeyboardInterrupt:
+
+        print("\nInterrupted. Saving progress...")
+
+        manager.save()
+
+        return videos
+
+    except Exception as e:
+
+        print(f"\nSearch collector stopped: {e}")
+
+        manager.save()
+
+        return videos
+
+
+# --------------------------------------------------
+# Example
+# --------------------------------------------------
 
 if __name__ == "__main__":
 
     videos = get_search_videos(limit=500)
 
-    print(len(videos))
+    print(f"\nCollected {len(videos)} search videos.")

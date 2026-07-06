@@ -1,7 +1,7 @@
 """
 main.py
 
-Build the raw YouTube dataset.
+Build the YouTube discovery dataset.
 
 Pipeline
 
@@ -13,114 +13,130 @@ Recent
 
 ↓
 
-Merge
-
-↓
-
-Deduplicate
+Discovery Log
 
 ↓
 
 Save
+
+Author:
+Innocent Josiah Patrick
 """
 
 import pandas as pd
 
 from collectors.trending import get_trending_videos
-from collectors.recent import get_recent_videos
 from collectors.search import get_search_videos
+from collectors.recent import get_recent_videos
 
 from src.utils.io import save_raw
 
 from src.config import (
     TRENDING_LIMIT,
+    SEARCH_LIMIT,
     RECENT_LIMIT,
-    SEARCH_LIMIT
 )
 
 
+# --------------------------------------------------
+# Safe Collector
+# --------------------------------------------------
+
+def run_collector(name, func, limit):
+
+    print(f"\nCollecting {name}...")
+
+    try:
+
+        data = func(limit=limit)
+
+        print(f"{name:<10}: {len(data):,}")
+
+        return data
+
+    except Exception as e:
+
+        print(f"{name} failed: {e}")
+
+        return []
+
+
+# --------------------------------------------------
+# Build Discovery Dataset
+# --------------------------------------------------
+
 def build_dataset():
 
-    print("\nCollecting Trending...")
-    trending = get_trending_videos(TRENDING_LIMIT)
-    print(f"Trending : {len(trending):,}")
+    discovery = []
 
-    print("\nCollecting Search...")
-    search = get_search_videos(SEARCH_LIMIT)
-    print(f"Search     : {len(search):,}")
-   
+    # ------------------------------------------
+    # Trending
+    # ------------------------------------------
 
-
-    print("\nCollecting Recent...")
-    recent = get_recent_videos(RECENT_LIMIT)
-    print(f"Recent    : {len(recent):,}")
-
-    # -------------------------------------
-    # Merge datasets
-    # -------------------------------------
-
-    df = pd.concat(
-        [
-            pd.DataFrame(trending),
-            pd.DataFrame(recent),
-            pd.DataFrame(search),
-        ],
-        ignore_index=True,
-    )
-
-    print(f"\nRows before merge: {len(df):,}")
-
-    # -------------------------------------
-    # Merge duplicate videos while preserving
-    # discovery pathways
-    # -------------------------------------
-
-    aggregation = {
-        "title": "first",
-        "description": "first",
-
-        "channel_id": "first",
-        "channel_title": "first",
-
-        "published_at": "first",
-        "category_id": "first",
-
-        "tags": "first",
-        "duration": "first",
-
-        "views": "first",
-        "likes": "first",
-        "comments": "first",
-        "engagement_rate": "first",
-
-        "collection_query": "first",
-        "collection_region": "first",
-
-        "collected_at": "first",
-
-        "source": lambda x: ",".join(sorted(set(x))),
-    }
-
-    df = (
-        df.groupby(
-            "video_id",
-            as_index=False
+    discovery.extend(
+        run_collector(
+            "Trending",
+            get_trending_videos,
+            TRENDING_LIMIT
         )
-        .agg(aggregation)
     )
 
-    print(f"Rows after merge : {len(df):,}")
+    # ------------------------------------------
+    # Search
+    # ------------------------------------------
 
-    # -------------------------------------
+    discovery.extend(
+        run_collector(
+            "Search",
+            get_search_videos,
+            SEARCH_LIMIT
+        )
+    )
+
+    # ------------------------------------------
+    # Recent
+    # ------------------------------------------
+
+    discovery.extend(
+        run_collector(
+            "Recent",
+            get_recent_videos,
+            RECENT_LIMIT
+        )
+    )
+
+    # ------------------------------------------
+    # Build DataFrame
+    # ------------------------------------------
+
+    discovery_df = pd.DataFrame(discovery)
+
+    print(
+        f"\nDiscovery Events : {len(discovery_df):,}"
+    )
+
+    if not discovery_df.empty:
+
+        print(
+            f"Unique Videos     : "
+            f"{discovery_df['video_id'].nunique():,}"
+        )
+
+    # ------------------------------------------
     # Save
-    # -------------------------------------
+    # ------------------------------------------
 
-    save_raw(df)
+    save_raw(discovery_df)
 
-    print("\nDataset successfully created.")
+    print("\nDiscovery dataset successfully created.")
 
-    return df
+    return discovery_df
 
+
+# --------------------------------------------------
+# Entry Point
+# --------------------------------------------------
 
 if __name__ == "__main__":
+
     build_dataset()

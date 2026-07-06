@@ -3,10 +3,17 @@ parser.py
 
 Utilities for converting raw YouTube API responses
 into a standardized dataset.
+
+Author:
+Innocent Josiah Patrick
 """
 
 from datetime import datetime
 
+
+# --------------------------------------------------
+# Helpers
+# --------------------------------------------------
 
 def safe_int(value):
     """Safely convert values to integers."""
@@ -16,10 +23,14 @@ def safe_int(value):
         return 0
 
 
-def parse_video(item, source):
+# --------------------------------------------------
+# Video Parser
+# --------------------------------------------------
+
+def parse_video(item, discovery_source):
     """
-    Parse a raw YouTube video object into
-    a standardized dictionary.
+    Convert a raw YouTube API response into a
+    standardized discovery record.
     """
 
     snippet = item.get("snippet", {})
@@ -32,33 +43,72 @@ def parse_video(item, source):
 
     engagement_rate = (
         (likes + comments) / views
-        if views > 0 else 0
+        if views > 0
+        else 0
     )
 
     return {
 
+        # --------------------------------------------------
+        # Video Identity
+        # --------------------------------------------------
+
         "video_id": item.get("id"),
 
-        "title": snippet.get("title"),
-        "description": snippet.get("description"),
+        # --------------------------------------------------
+        # Video Metadata
+        # --------------------------------------------------
 
-        "channel_id": snippet.get("channelId"),
-        "channel_title": snippet.get("channelTitle"),
+        "title": snippet.get("title"),
+
+        "description": snippet.get("description"),
 
         "published_at": snippet.get("publishedAt"),
 
         "category_id": snippet.get("categoryId"),
+
         "tags": snippet.get("tags", []),
 
+        "duration": content.get("duration"),
+
+        # --------------------------------------------------
+        # Channel Metadata
+        # --------------------------------------------------
+
+        "channel_id": snippet.get("channelId"),
+
+        "channel_title": snippet.get("channelTitle"),
+
+        # --------------------------------------------------
+        # Video Statistics
+        # --------------------------------------------------
+
         "views": views,
+
         "likes": likes,
+
         "comments": comments,
 
         "engagement_rate": engagement_rate,
 
-        "duration": content.get("duration"),
+        # --------------------------------------------------
+        # Discovery Metadata
+        # --------------------------------------------------
 
-        "source": source,
+        "discovery_source": discovery_source,
+
+        "collection_method": item.get("collection_method"),
+
+        "collection_query": item.get("collection_query"),
+
+        "collection_region": item.get("collection_region"),
+
+        "collection_timestamp": item.get("collection_timestamp"),
+
+        # --------------------------------------------------
+        # Processing Metadata
+        # --------------------------------------------------
 
         "collected_at": datetime.utcnow().isoformat()
+
     }

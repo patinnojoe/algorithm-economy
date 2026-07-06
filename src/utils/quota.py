@@ -1,27 +1,73 @@
+"""
+quota.py
+
+Utilities for quota management and request throttling.
+
+Author:
+Innocent Josiah Patrick
+"""
+
 import time
 
 
 class QuotaManager:
+    """
+    Simple in-memory YouTube quota tracker.
 
-    def __init__(self, limit=9500):
+    Default YouTube quota:
+        10,000 units/day
+    """
+
+    def __init__(
+        self,
+        limit=9500,
+        request_delay=0.4
+    ):
         self.limit = limit
         self.used = 0
+        self.request_delay = request_delay
+
+    # -----------------------------------------
+    # Consume quota
+    # -----------------------------------------
 
     def consume(self, units):
 
         self.used += units
 
-        if self.used > self.limit:
-            raise Exception(
-                f"Quota exceeded: {self.used}/{self.limit}"
+        if self.used >= self.limit:
+
+            raise RuntimeError(
+                f"Quota exceeded ({self.used}/{self.limit})"
             )
 
+    # -----------------------------------------
+    # Remaining quota
+    # -----------------------------------------
+
     def remaining(self):
+
         return self.limit - self.used
 
+    # -----------------------------------------
+    # Reset
+    # -----------------------------------------
+
     def reset(self):
+
         self.used = 0
 
+    # -----------------------------------------
+    # Throttle requests
+    # -----------------------------------------
 
-def rate_limit_sleep(seconds=1):
-    time.sleep(seconds)
+    def sleep(self):
+
+        time.sleep(self.request_delay)
+
+
+# --------------------------------------------------
+# Global quota manager
+# --------------------------------------------------
+
+quota = QuotaManager()

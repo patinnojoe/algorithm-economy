@@ -23,12 +23,25 @@ PALETTE = sns.color_palette(
 
 
 # create figure canvas
-def create_figure():
-    fig, ax = plt.subplots(
-        figsize=(FIG_WIDTH, FIG_HEIGHT)
-    )
-
-    return fig, ax
+def create_figure(*args, **kwargs):
+    """
+    Creates a matplotlib figure canvas.
+    Works for single plots and multi-panel grids automatically.
+    
+    Usage:
+      fig, ax = create_figure()                    # Single plot (Default)
+      fig, axes = create_figure(nrows=1, ncols=3)  # Multi-plot matrix
+    """
+    if 'figsize' not in kwargs:
+        # If building a multi-panel layout, scale the base figure size dynamically
+        nrows = kwargs.get('nrows', 1)
+        ncols = kwargs.get('ncols', 1)
+        kwargs['figsize'] = (FIG_WIDTH * ncols, FIG_HEIGHT * nrows)
+        
+  
+    fig, axes = plt.subplots(*args, **kwargs)
+    
+    return fig, axes
 
 # plot figures
 def style_plot(

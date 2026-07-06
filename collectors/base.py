@@ -1,3 +1,4 @@
+
 """
 base.py
 
@@ -5,10 +6,13 @@ Shared utilities for interacting with the YouTube Data API v3.
 
 Responsibilities
 ----------------
-- Create authenticated YouTube client
-- Safe API requests with retries
-- Automatic pagination
-- Batch retrieval of full video metadata
+- Build authenticated YouTube client
+- Execute safe API requests
+- Automatic retry handling
+- Quota tracking
+- Automatic throttling
+- Pagination
+- Fetch complete video metadata
 
 Author:
 Innocent Josiah Patrick
@@ -16,10 +20,14 @@ Innocent Josiah Patrick
 
 import os
 import time
+import random
 import logging
+
 from dotenv import load_dotenv
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
+
+from src.utils.quota import quota
 
 
 # --------------------------------------------------
@@ -32,7 +40,7 @@ API_KEY = os.getenv("YOUTUBE_API_KEY")
 
 if API_KEY is None:
     raise ValueError(
-        "YOUTUBE_API_KEY not found in environment variables."
+        "YOUTUBE_API_KEY not found."
     )
 
 
@@ -49,15 +57,22 @@ logger = logging.getLogger(__name__)
 
 
 # --------------------------------------------------
-# Build client
+# Build Client
 # --------------------------------------------------
 
 youtube = build(
-    serviceName="youtube",
-    version="v3",
+    "youtube",
+    "v3",
     developerKey=API_KEY,
     cache_discovery=False
 )
+
+
+# --------------------------------------------------
+# Configuration
+# --------------------------------------------------
+
+MAX_RETRIES = 3
 
 
 # --------------------------------------------------
@@ -66,49 +81,95 @@ youtube = build(
 
 def safe_request(
     request,
-    retries=5,
-    backoff=2
+    quota_cost=1
 ):
     """
-    Execute an API request with exponential backoff.
+    Execute a YouTube API request safely.
 
     Parameters
     ----------
     request
-        Google API request object
+        Google API request object.
 
-    retries : int
-
-    backoff : int
+    quota_cost : int
+        Cost of the endpoint.
 
     Returns
     -------
     dict | None
     """
 
-    for attempt in range(retries):
+    for attempt in range(MAX_RETRIES):
 
         try:
+
+            quota.consume(quota_cost)
+
+            quota.sleep()
+
+            time.sleep(
+                random.uniform(0.05, 0.20)
+            )
+
             return request.execute()
 
         except HttpError as e:
 
+            status = e.resp.status
+
             logger.warning(
-                f"HTTP Error (Attempt {attempt+1}/{retries}) "
-                f"{e.resp.status}"
+                f"HTTP {status} "
+                f"(Attempt {attempt+1}/{MAX_RETRIES})"
             )
+
+            # ------------------------------------
+            # Too many requests
+            # ------------------------------------
+
+            if status == 429:
+
+                logger.warning(
+                    "Rate limit reached."
+                )
+
+                quota.sleep()
+
+                return None
+
+            # ------------------------------------
+            # Retry transient server errors
+            # ------------------------------------
+
+            if status in (
+                500,
+                502,
+                503,
+                504
+            ):
+
+                sleep = 2 ** attempt
+
+                time.sleep(sleep)
+
+                continue
+
+            return None
+
+        except RuntimeError as e:
+
+            logger.warning(str(e))
+
+            return None
 
         except Exception as e:
 
-            logger.warning(
-                f"Request Failed (Attempt {attempt+1}/{retries}) "
-                f"{e}"
-            )
+            logger.warning(str(e))
 
-        sleep_time = backoff ** attempt
-        time.sleep(sleep_time)
+            return None
 
-    logger.error("Maximum retries exceeded.")
+    logger.warning(
+        "Maximum retries exceeded."
+    )
 
     return None
 
@@ -119,11 +180,11 @@ def safe_request(
 
 def paginate(
     request,
-    limit=None
+    limit=None,
+    quota_cost=100
 ):
     """
-    Iterate through every page returned by
-    a YouTube API request.
+    Iterate through paginated YouTube requests.
 
     Parameters
     ----------
@@ -131,31 +192,48 @@ def paginate(
 
     limit : int | None
 
+    quota_cost : int
+
     Yields
     ------
     list
-        items from each page
     """
 
     total = 0
 
     while request:
 
-        response = safe_request(request)
+        response = safe_request(
+            request=request,
+            quota_cost=quota_cost
+        )
 
         if response is None:
             break
 
-        items = response.get("items", [])
+        items = response.get(
+            "items",
+            []
+        )
+
+        if not items:
+            break
 
         yield items
 
         total += len(items)
 
-        logger.info(f"Collected {total:,} records")
+        logger.info(
+            f"Collected {total:,} records."
+        )
 
-        if limit is not None and total >= limit:
+        if (
+            limit is not None
+            and total >= limit
+        ):
             break
+
+        quota.sleep()
 
         request = youtube.search().list_next(
             request,
@@ -164,7 +242,7 @@ def paginate(
 
 
 # --------------------------------------------------
-# Fetch full video metadata
+# Fetch Video Metadata
 # --------------------------------------------------
 
 def fetch_video_details(
@@ -172,11 +250,11 @@ def fetch_video_details(
     batch_size=50
 ):
     """
-    Fetch complete metadata for a list of videos.
+    Fetch complete metadata for videos.
 
     Parameters
     ----------
-    video_ids : list[str]
+    video_ids : list
 
     batch_size : int
 
@@ -193,56 +271,70 @@ def fetch_video_details(
         batch_size
     ):
 
-        batch = video_ids[i:i + batch_size]
+        batch = video_ids[
+            i:i + batch_size
+        ]
 
         request = youtube.videos().list(
+
             part="snippet,statistics,contentDetails",
+
             id=",".join(batch)
+
         )
 
-        response = safe_request(request)
+        response = safe_request(
+            request=request,
+            quota_cost=1
+        )
 
-        if response:
+        if response is None:
 
-            videos.extend(
-                response.get("items", [])
+            logger.warning(
+                "Skipping metadata batch."
             )
 
+            continue
+
+        videos.extend(
+            response.get(
+                "items",
+                []
+            )
+        )
+
     logger.info(
-        f"Retrieved metadata for {len(videos):,} videos."
+        f"Retrieved metadata for "
+        f"{len(videos):,} videos."
     )
 
     return videos
 
 
 # --------------------------------------------------
-# Helper
+# Helpers
 # --------------------------------------------------
 
 def extract_video_ids(items):
     """
     Extract video ids from search results.
-
-    Parameters
-    ----------
-    items : list
-
-    Returns
-    -------
-    list[str]
     """
 
     ids = []
 
     for item in items:
 
-        video = item.get("id")
+        obj = item.get("id")
 
-        if isinstance(video, dict):
+        if isinstance(obj, dict):
 
-            video_id = video.get("videoId")
+            video_id = obj.get(
+                "videoId"
+            )
 
             if video_id:
+
                 ids.append(video_id)
 
     return ids
+

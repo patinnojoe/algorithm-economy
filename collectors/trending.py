@@ -4,26 +4,38 @@ trending.py
 Collect videos promoted by YouTube's Trending algorithm
 within the Nigerian YouTube ecosystem.
 
-Population:
-    Videos surfaced through the YouTube Trending page
-    for Nigeria (regionCode="NG").
+Population
+----------
+Videos surfaced through the YouTube Most Popular endpoint
+for Nigeria (regionCode="NG").
 
 Author:
 Innocent Josiah Patrick
 """
 
 from datetime import datetime
+
 from src.utils.parser import parse_video
 
-from .base import youtube, paginate
+from .base import (
+    youtube,
+    paginate,
+)
 
+# --------------------------------------------------
+# Configuration
+# --------------------------------------------------
 
 REGION = "NG"
 
 
+# --------------------------------------------------
+# Trending Collector
+# --------------------------------------------------
+
 def get_trending_videos(limit=200):
     """
-    Collect trending videos from YouTube Nigeria.
+    Collect videos promoted by YouTube's Trending algorithm.
 
     Parameters
     ----------
@@ -33,14 +45,14 @@ def get_trending_videos(limit=200):
     Returns
     -------
     list
-        List of YouTube video objects.
+        Parsed discovery records.
     """
 
     print("Collecting Trending Videos (Nigeria)...")
 
-    videos = []
-
     timestamp = datetime.utcnow().isoformat()
+
+    videos = []
 
     request = youtube.videos().list(
         part="snippet,statistics,contentDetails",
@@ -49,37 +61,47 @@ def get_trending_videos(limit=200):
         maxResults=50
     )
 
-    collected = 0
+    try:
 
-    for items in paginate(request, limit=limit):
+        for items in paginate(request, limit=limit):
 
-        for video in items:
+            for video in items:
 
-            video["collection_method"] = "trending"
+                video["collection_method"] = "trending"
+                video["collection_query"] = None
+                video["collection_region"] = REGION
+                video["collection_timestamp"] = timestamp
 
-            video["collection_region"] = REGION
+                videos.append(
+                    parse_video(
+                        video,
+                        discovery_source="trending"
+                    )
+                )
 
-            video["collection_timestamp"] = timestamp
+                if len(videos) >= limit:
+                    break
 
-            # videos.append(video)
-            videos.append(
-                parse_video(
-                    video,
-                    source="trending"
-                ))
+            if len(videos) >= limit:
+                break
 
-        collected += len(items)
+    except Exception as e:
 
-        if collected >= limit:
-            break
+        print(f"Trending collector stopped: {e}")
 
-    print(f"Collected {len(videos)} trending videos from Nigeria.")
+    print(
+        f"Collected {len(videos):,} trending videos from Nigeria."
+    )
 
     return videos
 
+
+# --------------------------------------------------
+# Example
+# --------------------------------------------------
 
 if __name__ == "__main__":
 
     videos = get_trending_videos(limit=200)
 
-    print(f"\nTotal Videos: {len(videos)}")
+    print(f"\nCollected {len(videos)} trending videos.")
