@@ -2,6 +2,9 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from pathlib import Path
 from src.config import OUTPUT_DIR
+from scipy.stats import kruskal, chi2_contingency
+
+
 
 # Global theme
 sns.set_theme(style="whitegrid")
@@ -20,6 +23,7 @@ LIGHT_RED = "#FF4D4D"
 PALETTE = sns.color_palette(
     [YOUTUBE_RED, LIGHT_RED, "#FF8080", "#FFB3B3"]
 )
+ALPHA = 0.05
 
 
 # create figure canvas
@@ -175,3 +179,26 @@ def interpret_eta_squared(eta):
         f"The remaining {(1-eta)*100:.2f}% of the variation is attributable "
         "to other factors not captured by category."
     )
+    
+    
+    # interepre kruskal
+def interpret_test(name, statistic, pvalue):
+    """
+    Print a readable interpretation of a statistical test.
+    """
+
+    print("=" * 60)
+    print(name)
+    print("=" * 60)
+
+    print(f"Test Statistic : {statistic:.3f}")
+    print(f"P-value        : {pvalue:.6f}")
+
+    if pvalue < ALPHA:
+        print(f"Decision       : Reject H₀ (p < {ALPHA})")
+        print("Interpretation : The observed differences are statistically significant.")
+    else:
+        print(f"Decision       : Fail to reject H₀ (p ≥ {ALPHA})")
+        print("Interpretation : No statistically significant difference was detected.")
+
+    print()
