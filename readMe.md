@@ -1,312 +1,383 @@
 # Algorithmic Economy
 
-## A Data Analysis of YouTube's Attention Economy in the Age of Monetized Content
+## Understanding Visibility as a Scarce Economic Resource on YouTube
+
+_A Computational Social Science Research Project_
 
 ---
 
-## Background
+# Abstract
 
-Social media platforms have transformed attention into a valuable economic resource. Creators, businesses, institutions, and public figures increasingly depend on visibility, engagement, and audience reach to generate income, influence, and cultural relevance.
+Digital platforms have transformed visibility into one of the most valuable resources of the modern economy.
 
-This project introduces the concept of the **Algorithmic Economy**, defined as a digital ecosystem in which platform algorithms allocate visibility, and that visibility can be converted into economic, social, and cultural value.
+Every day, millions of videos compete for a limited amount of user attention, yet only a small fraction receive widespread visibility. This unequal allocation of visibility has important consequences because visibility can subsequently be converted into economic, political, social and cultural value.
 
-While traditional economies allocate resources such as labor, land, and capital, modern digital platforms allocate a different resource: **attention**.
+This project introduces the **Algorithmic Economy**, a conceptual framework that treats platform algorithms as allocators of scarce digital visibility rather than merely recommendation systems.
 
-On YouTube, visibility is not distributed uniformly. Instead, content is surfaced through multiple discovery systems that determine what users see and what creators are rewarded for producing.
-
-This project investigates how these algorithmic pathways shape content visibility and whether algorithmic success can be explained and predicted using data science and machine learning techniques.
+Using data collected directly from the YouTube Data API v3, this research investigates how visibility is distributed, what characteristics are associated with highly visible content, and whether visibility patterns can be modelled computationally.
 
 ---
 
-## Research Problem
+# The Algorithmic Economy
 
-In traditional economies, access to productive resources often determines economic outcomes.
+Traditional economies allocate scarce resources such as:
 
-In social media ecosystems, visibility functions as a form of capital.
+- Land
+- Labour
+- Capital
 
-However, visibility is not distributed equally. Instead, it is mediated through algorithmic systems that influence what content users encounter and what content creators are incentivized to produce.
+Digital platforms allocate a different scarce resource:
 
-The central question of this project is:
+> **Visibility**
 
-> How does YouTube allocate visibility across different content types, and what characteristics are associated with engagement and virality within the platform's attention economy?
+Within the Algorithmic Economy,
+
+```
+Platform Algorithms
+            │
+            ▼
+Allocate Visibility
+            │
+            ▼
+Generate Attention
+            │
+            ▼
+Produce Engagement
+            │
+            ▼
+Create Economic,
+Political,
+Social and
+Cultural Value
+```
+
+Visibility therefore functions as a form of digital capital.
 
 ---
 
-## Research Objectives
+# Research Problem
 
-This project seeks to:
+Millions of videos are uploaded to YouTube every day, yet only a very small proportion achieve widespread visibility.
 
-1. Identify content categories that generate the highest engagement.
-2. Examine how YouTube's discovery pathways influence content visibility.
-3. Investigate which content characteristics are associated with higher engagement.
-4. Explore the relationship between content structure and algorithmic success.
-5. Build machine learning models capable of predicting virality.
-6. Interpret findings through the lens of the Algorithmic Economy framework.
+Although considerable research has examined recommendation systems, platform governance, engagement prediction and content monetization, comparatively little attention has been devoted to understanding **visibility itself** as a scarce economic resource allocated through algorithmic systems.
+
+Understanding how visibility is distributed—and the characteristics associated with highly visible content—is therefore increasingly important for creators, businesses, policymakers and researchers.
 
 ---
 
-## Research Questions
+# Research Objectives
 
-### ❓ RQ1: What content categories generate the highest engagement?
+This project aims to:
 
-#### Metrics
+1. Examine how visibility is distributed across YouTube.
+2. Identify content categories associated with greater visibility.
+3. Investigate content characteristics associated with visibility.
+4. Examine the relationship between visibility and engagement.
+5. Build machine learning models capable of predicting highly visible content.
+6. Interpret the findings through the Algorithmic Economy framework.
+
+---
+
+# Research Questions
+
+## RQ1
+
+### Which content categories receive the greatest visibility?
+
+Metrics
 
 - Views
-- Likes
-- Comments
-- Engagement Rate
+- Visibility distributions
+- Category comparisons
 
-#### Expected Output
+Outputs
 
-- Ranked category performance
-- Engagement distribution visualizations
-- Category-level comparison charts
+- Category rankings
+- Distribution plots
+- Statistical comparisons
 
 ---
 
-### ❓ RQ2: How do YouTube discovery pathways differ?
+## RQ2
 
-#### Discovery Sources
+### How is visibility distributed across YouTube's discovery ecosystem?
+
+Questions
+
+- Which content categories dominate different discovery mechanisms?
+- Which discovery mechanisms expose highly visible content?
+- Is visibility distributed equally across discovery mechanisms?
+
+Outputs
+
+- Cross-tabulations
+- Distribution analysis
+- Discovery comparisons
+
+---
+
+## RQ3
+
+### Which content characteristics are associated with visibility?
+
+Variables
+
+- Category
+- Duration
+- Publication time
+- Tags
+- Discovery source
+
+Outputs
+
+- Correlation analysis
+- Statistical testing
+- Feature relationships
+
+---
+
+## RQ4
+
+### Does video duration influence visibility?
+
+Questions
+
+- Do shorter videos receive greater visibility?
+- Is there an optimal duration?
+- Does duration influence engagement after visibility?
+
+Outputs
+
+- Duration distributions
+- Visibility comparisons
+- Engagement comparisons
+
+---
+
+## RQ5
+
+### Can highly visible content be predicted?
+
+Definition
+
+Highly visible videos are operationally defined as videos whose view counts fall within the **top 10%** of the dataset.
+
+Outputs
+
+- Binary classification
+- Model evaluation
+- Feature importance
+- Prediction pipeline
+
+---
+
+## RQ6
+
+### What does YouTube appear to reward?
+
+Questions
+
+- Which characteristics are consistently associated with visibility?
+- Which characteristics contribute most to engagement after visibility?
+- What patterns characterize highly visible videos?
+
+Outputs
+
+- Feature importance
+- Model interpretation
+- Algorithmic Economy discussion
+
+---
+
+# Dataset
+
+The dataset was collected directly from the **YouTube Data API v3** using a custom-built collection pipeline.
+
+Videos were sampled through multiple discovery mechanisms:
 
 - Trending
 - Search
-- Recent Uploads
-- Channel Sampling
-
-#### Questions
-
-- Which content categories dominate each discovery pathway?
-- Which pathways generate the highest visibility?
-- Are some categories amplified disproportionately?
-
-#### Expected Output
-
-- Source vs Category analysis
-- Distribution visualizations
-- Cross-tabulation analysis
-
----
-
-### ❓ RQ3: Which content characteristics are associated with engagement?
-
-#### Variables
-
-- Category
-- Duration
-- Tags
-- Posting time
-- Discovery source
-- Publishing patterns
-
-#### Expected Output
-
-- Correlation analysis
-- Feature relationship visualizations
-- Statistical summaries
-
----
-
-### ❓ RQ4: Does video duration influence engagement?
-
-#### Questions
-
-- Do shorter videos outperform longer videos?
-- Is there an optimal duration range for engagement?
-- Does duration influence virality?
-
-#### Expected Output
-
-- Duration distributions
-- Duration vs Engagement analysis
-- Duration vs Virality analysis
-
----
-
-### ❓ RQ5: Can virality be predicted?
-
-#### Definition
-
-For this project, a viral video is operationally defined as a video whose view count falls within the **top 10% of all videos in the dataset**.
-
-#### Expected Output
-
-- Binary classification model
-- Model evaluation metrics
-- Feature importance analysis
-- Virality prediction pipeline
-
----
-
-### ❓ RQ6: What does YouTube appear to reward?
-
-#### Questions
-
-- Which features contribute most to engagement?
-- Which features contribute most to virality?
-- What patterns emerge among highly visible videos?
-
-#### Expected Output
-
-- Feature importance rankings
-- Model interpretation
-- Algorithmic Economy analysis
-
----
-
-## Dataset
-
-The dataset was collected using the **YouTube Data API v3** through a custom-built data collection pipeline.
-
-The collection process samples videos through multiple discovery mechanisms:
-
-- Trending videos
-- Search-based discovery
 - Recent uploads
-- Channel-based sampling
 
-Each collected record contains metadata including:
+Each record contains:
 
-- Video ID
-- Title
-- Description
+- Video metadata
 - Channel information
-- Category
-- Tags
 - Publication timestamp
 - Duration
-- View count
-- Like count
-- Comment count
+- Category
+- Tags
+- Views
+- Likes
+- Comments
 
-The dataset represents a structured sample of YouTube's visibility ecosystem rather than a complete population of all uploaded videos.
+Rather than representing the complete YouTube ecosystem, the dataset provides a structured sample of videos observed through different discovery mechanisms.
 
 ---
 
-## Data Processing
+# Data Processing
 
-The raw dataset undergoes several preprocessing and feature engineering steps.
+## Cleaning
 
-### Data Cleaning
-
-- Duplicate removal using `video_id`
+- Duplicate removal
 - Missing value handling
-- Data type standardization
+- Data validation
 
-### Feature Engineering
+## Feature Engineering
 
-#### Temporal Features
+### Temporal Features
 
-- Hour of publication
-- Day of week
+- Hour
+- Day
+- Month
 
-#### Duration Features
+### Duration Features
 
-YouTube durations are provided in ISO 8601 format (e.g., `PT4M50S`).
+- Seconds
+- Minutes
 
-These are transformed into:
+### Visibility Features
 
-- Duration in seconds
-- Duration in minutes
-- Short-form indicator
+- Views
+- Log Views
 
-#### Engagement Features
+### Engagement Features
 
+- Likes
+- Comments
+- Engagement Rate
 - Like Rate
 - Comment Rate
-- Total Engagement
-- Engagement Rate
 
-#### Log Transformations
+### Content Features
 
-To address highly skewed distributions:
-
-- Log Views
-- Log Likes
-- Log Comments
-- Log Engagement
-
-#### Tag Features
-
+- Category
 - Tag Count
-- Tag Presence Indicator
+- Tag Presence
 
-#### Category Features
+### Visibility Label
 
-YouTube category IDs are mapped to human-readable category names while retaining numeric identifiers for machine learning.
+A binary visibility label is created using the 90th percentile of view counts.
 
-#### Virality Label
-
-A binary virality label is generated using the 90th percentile of views:
-
-- Viral = Top 10% of videos by view count
-- Non-Viral = Remaining 90%
+- High Visibility
+- Low Visibility
 
 ---
 
-## Methodology
+# Methodology
 
-### Phase 1 — Data Collection
-
-- YouTube Data API v3
-- Multi-source collection pipeline
-
-### Phase 2 — Data Cleaning
-
-- Validation
-- Deduplication
-- Feature creation
-
-### Phase 3 — Exploratory Data Analysis
-
-- Category analysis
-- Discovery pathway analysis
-- Engagement analysis
-
-### Phase 4 — Machine Learning
-
-- Virality prediction
-- Feature importance analysis
-- Model evaluation
-
----
-
-## Conceptual Framework: The Algorithmic Economy
-
-This project treats YouTube as an economic system in which visibility functions as a scarce resource.
-
-Within this framework:
-
-- Algorithms act as allocation mechanisms.
-- Engagement functions as market feedback.
-- Visibility functions as capital.
-- Virality functions as extreme concentration of attention.
-
-The objective is not merely to identify high-performing content, but to understand the underlying allocation patterns that shape success within the platform.
+```
+Data Collection
+        │
+        ▼
+Data Cleaning
+        │
+        ▼
+Feature Engineering
+        │
+        ▼
+Exploratory Analysis
+        │
+        ▼
+Statistical Analysis
+        │
+        ▼
+Machine Learning
+        │
+        ▼
+Algorithmic Economy Interpretation
+```
 
 ---
 
-## Findings
+# Repository Structure
 
-_To be completed._
+```
+collectors/
+src/
+    config.py
+    query/
+    utils/
+
+data/
+    raw/
+    processed/
+
+notebooks/
+
+outputs/
+
+README.md
+```
+
+---
+
+# Current Progress
+
+- ✅ Data collection pipeline completed
+- ✅ Feature engineering completed
+- ✅ Exploratory analysis underway
+- 🔄 Statistical analysis underway
+- 🔄 Machine learning in progress
+- 🔄 Research manuscript in preparation
 
 ---
 
-## Limitations
+# Machine Learning
 
-- API-based sampling does not capture the full YouTube population.
-- YouTube recommendation systems remain proprietary and cannot be directly observed.
-- Engagement metrics are proxies for attention and do not necessarily measure quality.
-- Trending content represents only one component of YouTube's broader visibility ecosystem.
+Planned models include
+
+- Logistic Regression
+- Random Forest
+- XGBoost
+
+Evaluation metrics
+
+- Accuracy
+- Precision
+- Recall
+- F1 Score
+- ROC-AUC
+
+---
+
+# Expected Contributions
+
+## Empirical
+
+Provides one of the few computational analyses of visibility allocation using publicly collected YouTube data.
+
+## Methodological
+
+Demonstrates a reproducible pipeline for studying digital platforms using API-collected data.
+
+## Conceptual
+
+Introduces the **Algorithmic Economy**, a framework that conceptualizes platform algorithms as allocators of scarce digital visibility.
 
 ---
 
-## Future Work
+# Limitations
 
-- Expand dataset size beyond 50,000 videos.
-- Improve channel-based sampling coverage.
-- Incorporate Natural Language Processing (NLP) features from titles, descriptions, and tags.
-- Compare findings across multiple countries and regions.
-- Extend analysis to additional platforms such as Reddit or X.
-- Explore deep learning approaches for virality prediction.
+- API sampling cannot observe the complete YouTube ecosystem.
+- Recommendation systems remain proprietary.
+- Visibility allocation cannot be directly observed.
+- Observed relationships should not be interpreted as causal algorithmic rules.
 
 ---
+
+# Future Work
+
+- Expand beyond 100,000 videos.
+- Incorporate NLP features.
+- Compare multiple countries.
+- Extend the framework to TikTok, Instagram and X.
+- Study longitudinal changes in visibility allocation.
+
+---
+
+# Author
+
+**Innocent Josiah Patrick**
+
+Computational Social Science • Machine Learning • Digital Sociology • Platform Studies
