@@ -1,383 +1,404 @@
-# Algorithmic Economy
+Algorithmic Economy
+Understanding Visibility as a Scarce Economic Resource on YouTube
 
-## Understanding Visibility as a Scarce Economic Resource on YouTube
+A Computational Social Science Research Project
 
-_A Computational Social Science Research Project_
+Abstract
 
----
+Digital platforms have transformed visibility into an increasingly important resource in the contemporary digital economy.
 
-# Abstract
+Millions of videos compete for users' limited attention, yet visibility is distributed unevenly across content, creators, categories, and discovery pathways. This unequal distribution has important implications because visibility can subsequently facilitate attention, engagement, influence, and economic value.
 
-Digital platforms have transformed visibility into one of the most valuable resources of the modern economy.
+This research introduces the Algorithmic Economy, a conceptual framework that treats digital visibility as a scarce resource whose distribution is shaped by platform algorithms and subsequently converted into different forms of value.
 
-Every day, millions of videos compete for a limited amount of user attention, yet only a small fraction receive widespread visibility. This unequal allocation of visibility has important consequences because visibility can subsequently be converted into economic, political, social and cultural value.
+Using computational social science methods and data collected directly through the YouTube Data API v3, the study examines the distribution of video visibility, investigates characteristics associated with highly visible content, and develops machine-learning models for predicting highly visible videos.
 
-This project introduces the **Algorithmic Economy**, a conceptual framework that treats platform algorithms as allocators of scarce digital visibility rather than merely recommendation systems.
+The empirical analysis focuses on YouTube while the conceptual framework is intended to provide a broader theoretical lens for studying algorithmically mediated digital economies.
 
-Using data collected directly from the YouTube Data API v3, this research investigates how visibility is distributed, what characteristics are associated with highly visible content, and whether visibility patterns can be modelled computationally.
-
----
-
-# The Algorithmic Economy
+The Algorithmic Economy
 
 Traditional economies allocate scarce resources such as:
 
-- Land
-- Labour
-- Capital
+Land
+Labour
+Capital
 
-Digital platforms allocate a different scarce resource:
+Digital platforms introduce another increasingly important resource:
 
-> **Visibility**
+Visibility
 
-Within the Algorithmic Economy,
+Within the Algorithmic Economy:
 
-```
 Platform Algorithms
-            │
-            ▼
-Allocate Visibility
-            │
-            ▼
-Generate Attention
-            │
-            ▼
-Produce Engagement
-            │
-            ▼
-Create Economic,
-Political,
-Social and
-Cultural Value
-```
+│
+▼
+Visibility Allocation
+│
+▼
+User Exposure
+│
+▼
+Attention
+│
+▼
+Engagement
+│
+▼
+Economic, Political,
+Social & Cultural Value
 
-Visibility therefore functions as a form of digital capital.
+The framework therefore conceptualizes visibility as a form of digital capital: a resource that provides opportunities for content, creators, organizations, and other digital actors to attract attention and generate subsequent forms of value.
 
----
+Research Problem
 
-# Research Problem
+The enormous volume of content uploaded to digital platforms creates a fundamental problem of information abundance. Not every piece of content can receive equivalent exposure.
 
-Millions of videos are uploaded to YouTube every day, yet only a very small proportion achieve widespread visibility.
+Platform algorithms therefore play an important role in determining which content is surfaced to users through recommendation, search, trending systems, and other forms of platform-mediated discovery.
 
-Although considerable research has examined recommendation systems, platform governance, engagement prediction and content monetization, comparatively little attention has been devoted to understanding **visibility itself** as a scarce economic resource allocated through algorithmic systems.
+Although existing scholarship has examined recommendation systems, platform governance, creator labour, attention, and monetization, this research focuses specifically on visibility as a scarce resource within the digital economy.
 
-Understanding how visibility is distributed—and the characteristics associated with highly visible content—is therefore increasingly important for creators, businesses, policymakers and researchers.
+The study asks how visibility is distributed, which characteristics are associated with higher levels of visibility, and whether these patterns can be identified computationally.
 
----
+Research Objectives
 
-# Research Objectives
+The study aims to:
 
-This project aims to:
+Examine how visibility is distributed across YouTube content categories.
+Examine how visibility varies across the discovery pathways represented in the dataset.
+Identify content characteristics associated with higher levels of visibility.
+Examine the relationship between video duration and visibility.
+Develop machine-learning models capable of predicting highly visible content.
+Interpret the empirical findings through the Algorithmic Economy framework.
 
-1. Examine how visibility is distributed across YouTube.
-2. Identify content categories associated with greater visibility.
-3. Investigate content characteristics associated with visibility.
-4. Examine the relationship between visibility and engagement.
-5. Build machine learning models capable of predicting highly visible content.
-6. Interpret the findings through the Algorithmic Economy framework.
+## Research Questions
 
----
+# RQ1 — Visibility Across Categories
 
-# Research Questions
+Which YouTube content categories receive the greatest visibility?
 
-## RQ1
+The analysis examines:
 
-### Which content categories receive the greatest visibility?
+View distributions
+Mean views
+Median views
+Category-level differences
+Distributional inequality
 
-Metrics
+Statistical analysis includes:
 
-- Views
-- Visibility distributions
-- Category comparisons
+ANOVA
+Eta squared
+Post-hoc comparisons
 
-Outputs
+Status: Completed
 
-- Category rankings
-- Distribution plots
-- Statistical comparisons
+# RQ2 — Content Characteristics and Visibility
 
----
+Which observable content characteristics are associated with higher levels of visibility?
 
-## RQ2
+The analysis examines characteristics including:
 
-### How is visibility distributed across YouTube's discovery ecosystem?
+Content category
+Video duration
+Publication time
+Tags
+Temporal characteristics
+Discovery pathway
 
-Questions
+The objective is to determine which observable characteristics are systematically associated with differences in video visibility.
 
-- Which content categories dominate different discovery mechanisms?
-- Which discovery mechanisms expose highly visible content?
-- Is visibility distributed equally across discovery mechanisms?
+# RQ3 — Video Duration and Visibility
 
-Outputs
+How is video duration associated with visibility on YouTube?
 
-- Cross-tabulations
-- Distribution analysis
-- Discovery comparisons
+The analysis investigates:
 
----
+The distribution of video duration
+The relationship between duration and views
+Differences in visibility across duration groups
+Whether particular duration ranges are associated with higher visibility
 
-## RQ3
+Status: Pending
 
-### Which content characteristics are associated with visibility?
+RQ4 — Predicting Highly Visible Content
+Can highly visible YouTube videos be predicted from observable content characteristics?
 
-Variables
+Highly visible videos are operationally defined as videos whose view counts fall within the top 10% of the study dataset.
 
-- Category
-- Duration
-- Publication time
-- Tags
-- Discovery source
+The analysis uses machine-learning classification models to investigate whether observable characteristics can distinguish highly visible from less-visible videos.
 
-Outputs
+Planned models include:
 
-- Correlation analysis
-- Statistical testing
-- Feature relationships
+Logistic Regression
+Random Forest
+XGBoost
 
----
+Evaluation will include:
 
-## RQ4
+Accuracy
+Precision
+Recall
+F1 Score
+ROC-AUC
 
-### Does video duration influence visibility?
+Status: Pending
 
-Questions
+Dataset
 
-- Do shorter videos receive greater visibility?
-- Is there an optimal duration?
-- Does duration influence engagement after visibility?
+The dataset was collected directly from the YouTube Data API v3 using a custom-built data collection pipeline.
 
-Outputs
+The current dataset contains:
 
-- Duration distributions
-- Visibility comparisons
-- Engagement comparisons
+17,249 unique videos
+36 variables
 
----
+Variables include:
 
-## RQ5
+Video ID
+Title
+Description
+Publication timestamp
+Category
+Duration
+Channel information
+Views
+Likes
+Comments
+Engagement rate
+Discovery source
+Collection method
+Collection region
+Tags
+Temporal features
+Derived visibility features
 
-### Can highly visible content be predicted?
+The dataset does not represent the complete YouTube ecosystem. Instead, it constitutes a structured sample of videos obtained through the discovery mechanisms implemented in the research data-collection pipeline.
 
-Definition
-
-Highly visible videos are operationally defined as videos whose view counts fall within the **top 10%** of the dataset.
-
-Outputs
-
-- Binary classification
-- Model evaluation
-- Feature importance
-- Prediction pipeline
-
----
-
-## RQ6
-
-### What does YouTube appear to reward?
-
-Questions
-
-- Which characteristics are consistently associated with visibility?
-- Which characteristics contribute most to engagement after visibility?
-- What patterns characterize highly visible videos?
-
-Outputs
-
-- Feature importance
-- Model interpretation
-- Algorithmic Economy discussion
-
----
-
-# Dataset
-
-The dataset was collected directly from the **YouTube Data API v3** using a custom-built collection pipeline.
-
-Videos were sampled through multiple discovery mechanisms:
-
-- Trending
-- Search
-- Recent uploads
-
-Each record contains:
-
-- Video metadata
-- Channel information
-- Publication timestamp
-- Duration
-- Category
-- Tags
-- Views
-- Likes
-- Comments
-
-Rather than representing the complete YouTube ecosystem, the dataset provides a structured sample of videos observed through different discovery mechanisms.
-
----
-
-# Data Processing
-
-## Cleaning
-
-- Duplicate removal
-- Missing value handling
-- Data validation
-
-## Feature Engineering
-
-### Temporal Features
-
-- Hour
-- Day
-- Month
-
-### Duration Features
-
-- Seconds
-- Minutes
-
-### Visibility Features
-
-- Views
-- Log Views
-
-### Engagement Features
-
-- Likes
-- Comments
-- Engagement Rate
-- Like Rate
-- Comment Rate
-
-### Content Features
-
-- Category
-- Tag Count
-- Tag Presence
-
-### Visibility Label
-
-A binary visibility label is created using the 90th percentile of view counts.
-
-- High Visibility
-- Low Visibility
-
----
-
-# Methodology
-
-```
 Data Collection
-        │
-        ▼
+
+Videos were collected using multiple YouTube API discovery mechanisms, including:
+
+Trending
+Search-based collection
+Recent-upload collection
+Channel-based sampling
+
+The multiple collection pathways were designed to reduce dependence on a single discovery mechanism and provide different views of the YouTube content environment.
+
+Importantly, these pathways are research sampling mechanisms, not direct measurements of YouTube's complete internal recommendation ecosystem.
+
+Data Processing
 Data Cleaning
-        │
-        ▼
+
+The preprocessing pipeline includes:
+
+Duplicate removal
+Missing-value assessment
+Data validation
+Variable standardization
+Data-type conversion
 Feature Engineering
-        │
-        ▼
-Exploratory Analysis
-        │
-        ▼
+Temporal Features
+Publication hour
+Publication day
+Publication month
+Duration Features
+Duration in seconds
+Duration in minutes
+Visibility Features
+Views
+Log-transformed views
+Engagement Features
+Likes
+Comments
+Engagement rate
+Like rate
+Comment rate
+Content Features
+Category
+Tag count
+Tag presence
+Visibility Classification
+
+A binary visibility variable is created using the 90th percentile of view counts.
+
+Top 10% of videos
+│
+▼
+High Visibility
+
+Remaining 90%
+│
+▼
+Lower Visibility
+Methodology
+
+The empirical workflow follows:
+
+YouTube Data API
+│
+▼
+Data Collection
+│
+▼
+Data Cleaning
+│
+▼
+Feature Engineering
+│
+▼
+Exploratory Data Analysis
+│
+▼
 Statistical Analysis
-        │
-        ▼
+│
+▼
 Machine Learning
-        │
-        ▼
+│
+▼
 Algorithmic Economy Interpretation
-```
+Chapter Five — Empirical Findings
 
----
+The empirical analysis is structured around four research questions:
 
-# Repository Structure
+RQ1
+Visibility Across Categories
+│
+▼
+RQ2
+Content Characteristics
+│
+▼
+RQ3
+Video Duration
+│
+▼
+RQ4
+Predicting Highly Visible Content
+Completed analysis
 
-```
+RQ1 — Visibility Across YouTube Categories
+
+The first empirical analysis has been completed. It examines differences in visibility across YouTube content categories using descriptive statistics and inferential analysis.
+
+The analysis includes:
+
+Category distribution
+Mean views
+Median views
+View distributions
+Outlier analysis
+ANOVA
+Eta squared
+Post-hoc comparisons
+
+The current findings indicate that visibility differs substantially across content categories, while category membership alone explains only a portion of the variation in video views.
+
+Current Research Progress
+✅ Research framework developed
+✅ Research questions defined
+✅ YouTube API data collection pipeline completed
+✅ Dataset assembled
+✅ Data cleaning completed
+✅ Feature engineering completed
+✅ RQ1: Category-level visibility analysis completed
+🔄 RQ2: Content characteristics associated with visibility
+⏳ RQ3: Video duration and visibility
+⏳ RQ4: Machine-learning prediction
+⏳ Final empirical interpretation
+⏳ Research manuscript completion
+Machine Learning
+
+The machine-learning component investigates whether highly visible videos can be predicted from observable characteristics.
+
+Candidate models:
+
+Logistic Regression
+Random Forest
+XGBoost
+
+Evaluation metrics:
+
+Accuracy
+Precision
+Recall
+F1 Score
+ROC-AUC
+
+Model interpretation will focus on identifying which observable characteristics contribute most strongly to the classification of highly visible content.
+
+The machine-learning results will subsequently be interpreted through the Algorithmic Economy framework rather than being treated simply as a prediction exercise.
+
+Expected Contributions
+Empirical Contribution
+
+Provides a computational analysis of YouTube visibility using a structured dataset collected through the YouTube Data API.
+
+Methodological Contribution
+
+Demonstrates how computational social science methods can be used to investigate patterns of digital visibility through API-collected platform data.
+
+Conceptual Contribution
+
+Develops the Algorithmic Economy as an integrative framework for understanding the relationship between:
+
+Algorithms
+↓
+Visibility
+↓
+Attention
+↓
+Engagement
+↓
+Value
+
+The framework does not claim to reveal YouTube's proprietary ranking algorithm. Instead, it provides a theoretical lens for interpreting observable patterns of visibility within an algorithmically mediated platform environment.
+
+Important Limitation
+
+The study measures observable visibility primarily through video view counts.
+
+YouTube's internal recommendation and ranking systems are proprietary and cannot be directly observed through the YouTube Data API. Consequently, statistical associations between video characteristics and views should not be interpreted as proof that YouTube's algorithm directly rewards a particular characteristic.
+
+The study identifies patterns associated with visibility, rather than recovering the causal decision rules of YouTube's recommendation system.
+
+Other limitations include:
+
+API-based sampling does not represent the complete YouTube ecosystem.
+Discovery pathways in the dataset are research sampling mechanisms rather than exhaustive representations of YouTube's internal recommendation system.
+View counts are influenced by multiple factors that cannot all be observed in the dataset.
+Cross-sectional observational data cannot establish causal relationships between content characteristics and visibility.
+Highly visible content may be influenced by external events, celebrity status, paid promotion, audience size, or factors unavailable through the API.
+Future Research
+
+Potential extensions include:
+
+Expanding the dataset beyond 100,000 videos
+Incorporating natural-language processing of titles and descriptions
+Incorporating thumbnail or visual-content analysis
+Comparing different countries or regions
+Conducting longitudinal analysis of visibility
+Extending the framework to other platforms such as TikTok, Instagram, and X
+Developing comparative models of algorithmically mediated visibility across platforms
+Repository Structure
 collectors/
+
 src/
-    config.py
-    query/
-    utils/
+config.py
+query/
+utils/
 
 data/
-    raw/
-    processed/
+raw/
+processed/
 
 notebooks/
 
 outputs/
 
 README.md
-```
+Author
 
----
-
-# Current Progress
-
-- ✅ Data collection pipeline completed
-- ✅ Feature engineering completed
-- ✅ Exploratory analysis underway
-- 🔄 Statistical analysis underway
-- 🔄 Machine learning in progress
-- 🔄 Research manuscript in preparation
-
----
-
-# Machine Learning
-
-Planned models include
-
-- Logistic Regression
-- Random Forest
-- XGBoost
-
-Evaluation metrics
-
-- Accuracy
-- Precision
-- Recall
-- F1 Score
-- ROC-AUC
-
----
-
-# Expected Contributions
-
-## Empirical
-
-Provides one of the few computational analyses of visibility allocation using publicly collected YouTube data.
-
-## Methodological
-
-Demonstrates a reproducible pipeline for studying digital platforms using API-collected data.
-
-## Conceptual
-
-Introduces the **Algorithmic Economy**, a framework that conceptualizes platform algorithms as allocators of scarce digital visibility.
-
----
-
-# Limitations
-
-- API sampling cannot observe the complete YouTube ecosystem.
-- Recommendation systems remain proprietary.
-- Visibility allocation cannot be directly observed.
-- Observed relationships should not be interpreted as causal algorithmic rules.
-
----
-
-# Future Work
-
-- Expand beyond 100,000 videos.
-- Incorporate NLP features.
-- Compare multiple countries.
-- Extend the framework to TikTok, Instagram and X.
-- Study longitudinal changes in visibility allocation.
-
----
-
-# Author
-
-**Innocent Josiah Patrick**
+Innocent Josiah Patrick
 
 Computational Social Science • Machine Learning • Digital Sociology • Platform Studies
