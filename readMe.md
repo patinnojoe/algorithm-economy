@@ -120,7 +120,8 @@ Whether particular duration ranges are associated with higher visibility
 
 Status: Pending
 
-RQ4 — Predicting Highly Visible Content
+## RQ4 — Predicting Highly Visible Content
+
 Can highly visible YouTube videos be predicted from observable content characteristics?
 
 Highly visible videos are operationally defined as videos whose view counts fall within the top 10% of the study dataset.
@@ -302,8 +303,8 @@ Current Research Progress
 ✅ Data cleaning completed
 ✅ Feature engineering completed
 ✅ RQ1: Category-level visibility analysis completed
-🔄 RQ2: Content characteristics associated with visibility
-⏳ RQ3: Video duration and visibility
+✅ RQ2: Content characteristics associated with visibility
+✅ RQ3: Video duration and visibility
 ⏳ RQ4: Machine-learning prediction
 ⏳ Final empirical interpretation
 ⏳ Research manuscript completion
