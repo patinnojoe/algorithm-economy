@@ -177,16 +177,17 @@ The dataset does not represent the complete YouTube ecosystem. Instead, it const
 
 Data Collection
 
-Videos were collected using multiple YouTube API discovery mechanisms, including:
+V1 used three YouTube API discovery mechanisms:
 
-Trending
-Search-based collection
-Recent-upload collection
-Channel-based sampling
+- Trending
+- Search-based collection
+- Recent-upload collection
 
 The multiple collection pathways were designed to reduce dependence on a single discovery mechanism and provide different views of the YouTube content environment.
 
 Importantly, these pathways are research sampling mechanisms, not direct measurements of YouTube's complete internal recommendation ecosystem.
+
+Algorithmic Economy II uses the `video_id` column of the current [processed dataset](data/processed/youtube_clean.csv) as its sampling frame. The 17,249 videos in this file define the extension's cohort.
 
 Data Processing
 Data Cleaning
