@@ -305,9 +305,9 @@ Current Research Progress
 ✅ RQ1: Category-level visibility analysis completed
 ✅ RQ2: Content characteristics associated with visibility
 ✅ RQ3: Video duration and visibility
-⏳ RQ4: Machine-learning prediction
-⏳ Final empirical interpretation
-⏳ Research manuscript completion
+✅ RQ4: Machine-learning prediction
+✅ Final empirical interpretation
+✅ Research manuscript completion
 Machine Learning
 
 The machine-learning component investigates whether highly visible videos can be predicted from observable characteristics.
